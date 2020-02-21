@@ -6,6 +6,14 @@ using System.IO.Compression;
 
 public static class E
 {
+	public static void require(bool test)
+	{
+		if (!test)
+		{
+			throw new Exception("nope");
+		}
+	}
+
 	public static BinaryReader SeekStream(this byte[] data, long offset)
 	{
 		return data.SeekStream(offset, data.Length - offset);

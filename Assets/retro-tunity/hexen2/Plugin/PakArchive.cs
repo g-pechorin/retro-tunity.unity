@@ -7,14 +7,6 @@ using UnityEngine;
 
 public static class PakArchive
 {
-	private static void require(bool test)
-	{
-		if (!test)
-		{
-			throw new UnityException("nope");
-		}
-	}
-
 	public struct q_header
 	{
 		public readonly int _offset;
@@ -24,10 +16,10 @@ public static class PakArchive
 
 		public q_header(BinaryReader binaryReader)
 		{
-			PakArchive.require('P' == binaryReader.ReadChar());
-			PakArchive.require('A' == binaryReader.ReadChar());
-			PakArchive.require('C' == binaryReader.ReadChar());
-			PakArchive.require('K' == binaryReader.ReadChar());
+			E.require('P' == binaryReader.ReadChar());
+			E.require('A' == binaryReader.ReadChar());
+			E.require('C' == binaryReader.ReadChar());
+			E.require('K' == binaryReader.ReadChar());
 
 			_offset = binaryReader.ReadInt32();
 			_size = binaryReader.ReadInt32();
@@ -86,9 +78,7 @@ public static class PakArchive
 
 	private static void nest(AssetImportContext context, string left, GameObject into, string[] todo, GameObject leaf)
 	{
-
-
-		require(1 <= todo.Length);
+		E.require(1 <= todo.Length);
 
 		if (1 == todo.Length)
 		{
