@@ -1,8 +1,6 @@
 ﻿
 using System;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.IO.Compression;
 
 public static class E
 {
@@ -14,21 +12,9 @@ public static class E
 		}
 	}
 
-	public static BinaryReader SeekStream(this byte[] data, long offset)
-	{
-		return data.SeekStream(offset, data.Length - offset);
-	}
-
 	public static string replaceAll(this string from, string regex, string pattern)
 	{
 		return Regex.Replace(from, regex, pattern);
-	}
-
-	public static BinaryReader SeekStream(this byte[] data, long offset, long size)
-	{
-		byte[] subset = new byte[size];
-		Array.Copy(data, offset, subset, 0, size);
-		return new BinaryReader(new MemoryStream(subset));
 	}
 
 	public static string flip(this string text)
@@ -43,18 +29,6 @@ public static class E
 		return output;
 	}
 
-	public static byte[] pizg(this byte[] data)
-	{
-		// decompress the stream
-		using (Stream readStream = new GZipStream(new MemoryStream(data), CompressionMode.Decompress))
-		{
-			MemoryStream decompress = new MemoryStream();
-			readStream.CopyTo(decompress);
-			return decompress.ToArray();
-		}
-
-	}
-
 	public static T[] flip<T>(this T[] data)
 	{
 		T[] output = new T[data.Length];
@@ -67,9 +41,9 @@ public static class E
 		return output;
 	}
 
-	public delegate O Fun<A0, O>(A0 a0);
-	
-	public static string drop(this string text, Fun<char, bool> q)
+	public delegate O Map<I, O>(I i);
+
+	public static string drop(this string text, Map<char, bool> q)
 	{
 		return ("" != text && q(text[0]))
 			? text.Substring(1).drop(q)
@@ -77,7 +51,7 @@ public static class E
 	}
 
 
-	public static string take(this string text, Fun<char, bool> q)
+	public static string take(this string text, Map<char, bool> q)
 	{
 		return ("" != text && q(text[0]))
 			? text[0] + text.tail().take(q)
